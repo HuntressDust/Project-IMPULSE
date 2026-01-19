@@ -102,12 +102,11 @@ class Ally(BaseAI):
         print(distance)
         if self.engine.game_map.visible[self.entity.x, self.entity.y]:
             if distance <= 1:
-                print("attacking")
+
                 return MeleeAction(self.entity, dx, dy).perform()
             self.path = self.get_path_to(self.target.x, self.target.y)
 
             if self.path:
-                print("moving")
                 self.move_to()
             return WaitAction(self.entity).perform()
 
@@ -149,14 +148,13 @@ class Ally(BaseAI):
                 self.engine.message_log.add_message(f"Target Eliminated", ally)
             return self.target.is_alive
         else:
-            print("no Targets")
             return False
 
     def pickTarget(self):
         min_distance=1000
 
         for entity in self.engine.game_map.entities:
-            print(entity.name)
+
             if hasattr(entity,"ai"):
 
                 if isinstance(entity.ai,HostileEnemy):
@@ -164,7 +162,7 @@ class Ally(BaseAI):
                  if self.engine.game_map.visible[entity.x, entity.y]:
 
                      distance=self.getDistance(entity.x,entity.y)
-                     print(distance)
+
                      if min_distance>distance:
                            self.target=entity
 

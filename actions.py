@@ -69,7 +69,6 @@ class ActionWithDirection(Action):
 class MeleeAction(ActionWithDirection):
 
     def perform(self) -> None:
-        print("MeleeAction")
         target = self.target_actor
         if not target:
             raise exceptions.Impossible("Nothing to attack.")
@@ -130,19 +129,16 @@ class RangedAttackAction(Action):
         slotList=[]
         for slot in self.entity.equipment.slots:
             weapon=getattr(self.entity.equipment,slot)
-            print("Is weapon in ",slot)
             if weapon is not None:
-                print("is weapon two-handed")
                 if not two_hander_flag:
                     two_hander_flag=weapon.equippable.two_handed
                     range=weapon.equippable.range_bonus
 
-                    print("print is target in range")
-                    print("(is",range,"greater than",self.distance_to_target,")")
+
                     if (range >= self.distance_to_target):
-                        print("Is weapon empty?")
+
                         if not weapon.equippable.is_empty():
-                            print("append", slot, "to list of slots to use")
+
                             slotList.append(slot)
                         else:
                             self.engine.message_log.add_message(
@@ -154,7 +150,6 @@ class RangedAttackAction(Action):
         if getattr(item_in_slot.equippable,"ammo_count") is not None:
             item_in_slot.equippable.decrement_ammo()
 
-        print("ATTACK",self.entity.fighter.power_from_slot(slot),target.fighter.defense)
         damage = self.entity.fighter.power_from_slot(slot) - target.fighter.defense
 
 

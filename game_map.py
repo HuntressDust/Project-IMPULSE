@@ -7,6 +7,7 @@ import tcod.los
 from tcod.console import Console
 import tile_types
 import color
+
 from entity import Actor, Item
 if TYPE_CHECKING:
     from engine import Engine
@@ -161,12 +162,14 @@ class GameWorld:
 
         self.current_floor = current_floor
 
-    def generate_floor(self) -> None:
+    def generate_floor(self,floor_type: int=0) -> None:
         from procgen import generate_dungeon
+        from procgen import generate_mall
+        from procgen import generate_BSP
 
         self.current_floor +=1
-
-        self.engine.game_map = generate_dungeon(
+        if floor_type==0:
+            self.engine.game_map = generate_dungeon(
             max_rooms=self.max_rooms,
             room_min_size=self.room_min_size,
             room_max_size=self.room_max_size,
@@ -174,4 +177,24 @@ class GameWorld:
             map_height=self.map_height,
 
             engine=self.engine,
-        )
+            )
+        if floor_type==1:
+            self.engine.game_map=generate_mall(
+            max_rooms=self.max_rooms,
+            room_min_size=5,
+            room_max_size=10,
+            map_width=70,
+            map_height=70,
+
+            engine=self.engine,
+            )
+        if floor_type==2:
+            self.engine.game_map=generate_BSP(
+            max_rooms=self.max_rooms,
+            room_min_size=5,
+            room_max_size=10,
+            map_width=70,
+            map_height=70,
+
+            engine=self.engine,
+            )
