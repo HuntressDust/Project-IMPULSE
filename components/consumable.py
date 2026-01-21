@@ -47,7 +47,7 @@ class Ammo(Consumable):
                 if getattr(equipment,slot) is not None:
                     item=getattr(equipment,slot)
                     if item.name == gun_name:
-                     if item.ammo_count < item.ammo_max:
+                     if item.equippable.ammo_count < item.equippable.ammo_max:
                         rounds_loaded =self.load_gun(item)
                         self.engine.message_log.add_message(
                             f"You load {rounds_loaded} {self.parent.name} into the {gun_name} ",
@@ -61,7 +61,7 @@ class Ammo(Consumable):
 
     def load_gun(self, gun: Item):
         load_amount: int =0
-        ammo_needed = gun.ammo_max-gun.ammo_count
+        ammo_needed = gun.equippable.ammo_max-gun.equippable.ammo_count
 
         if self.rounds >= ammo_needed:
             load_amount= ammo_needed
@@ -69,7 +69,7 @@ class Ammo(Consumable):
             load_amount = self.rounds
 
         self.rounds -= load_amount
-        gun.ammo_count += load_amount
+        gun.equippable.ammo_count += load_amount
 
         if self.rounds ==0:
             self.consume()

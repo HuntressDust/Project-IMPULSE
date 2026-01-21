@@ -60,34 +60,26 @@ class HostileEnemy(BaseAI):
 
 class ConfusedEnemy(BaseAI):
     def __init__(
-            self, entity: Actor, previous_ai: Optional[BaseAI], turns_remaining: int):
+            self, entity: Actor,):
         super().__init__(entity)
-        self.previous_ai = previous_ai
-        self.turns_remaining = turns_remaining
 
     def perform(self) -> None:
 
-        if self.turns_remaining <=0:
-            self.engine.message_log.add_message(
-                f"The {self.entity.name} has come down from its high"
-            )
-            self.entity.ai = self.previous_ai
-        else:
-            dir_x, dir_y = random.choice(
-                [
-                    (-1, -1),  # Northwest
-                    (0, -1),  # North
-                    (1, -1),  # Northeast
-                    (-1, 0),  # West
-                    (1, 0),  # East
-                    (-1, 1),  # Southwest
-                    (0, 1),  # South
-                    (1, 1),  # Southeast
-                ]
-            )
-            self.turns_remaining -=1
+        dir_x, dir_y = random.choice(
+            [
+                (-1, -1),  # Northwest
+                (0, -1),  # North
+                (1, -1),  # Northeast
+                (-1, 0),  # West
+                (1, 0),  # East
+                (-1, 1),  # Southwest
+                (0, 1),  # South
+                (1, 1),  # Southeast
+            ]
+        )
 
-            return BumpAction(self.entity, dir_x, dir_y,).perform()
+
+        return BumpAction(self.entity, dir_x, dir_y,).perform()
 
 class Ally(BaseAI):
     def __init__(self, entity: Actor, target:Optional[Actor]=None):

@@ -43,7 +43,7 @@ def new_game() -> Engine:
         viewport_height=30,
 
     )
-    engine.game_world.generate_floor(2)
+    engine.game_world.generate_floor(0)
     engine.update_fov()
 
     engine.message_log.add_message(

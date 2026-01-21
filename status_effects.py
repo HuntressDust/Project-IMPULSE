@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Optional, TYPE_CHECKING
 
-
+from IMPULSE.components.ai import HostileEnemy, ConfusedEnemy
 
 if TYPE_CHECKING:
     from entity import Actor
@@ -13,6 +13,10 @@ class StatusEffect:
         self.parent=target
         self.max_time= max_time
         self.time_remaining = max_time
+        self.orig_char=self.parent.char
+        self.orig_color=self.parent.color
+
+
     def decrement_timer(self):
         self.time_remaining -=1
     def update(self):
@@ -31,24 +35,40 @@ class StatusEffect:
 class Burning(StatusEffect):
     def __init__(self, target: Actor,max_time: int):
         super().__init__(target, max_time)
-        self.orig_char=self.parent.char
-        self.orig_color=self.parent.color
 
     def perform(self):
-        print(self.time_remaining)
         if self.time_remaining % 15 >0:
             if self.parent.char==self.orig_char:
                 self.parent.char='!'
-                self.parent.color=(0,0,0)
+                self.parent.color=(255,0,0)
+                self.parent.fighter.take_damage(3)
+                self.parent.gamemap.engine.message_log.add_message(f"THE {self.parent.name} IS BURNING!")
 
             else:
                 self.parent.char=self.orig_char
                 self.parent.color=self.orig_color
 
-            self.parent.fighter.take_damage(1)
-            self.parent.gamemap.engine.message_log.add_message(f"THE {self.parent.name} IS BURNING")
-
 
     def end_effect(self):
         self.parent.char =self.orig_char
         self.parent.color=self.orig_color
+        self.parent.gamemap.engine.message_log.add_message(f"The {self.parent.name} has been extinguished")
+
+class Confused(StatusEffect):
+    def __init__(self, target: Actor, max_time: int):
+        super().__init__(target, max_time)
+
+    def perform(self):
+        if self.parent.ai is not ConfusedEnemy:
+            self.parent.ai=ConfusedEnemy(self.parent)
+            self.parent.gamemap.engine.message_log.add_message(f"The {self.parent.name} is disassociating...")
+
+        if self.time_remaining % 15 > 0:
+            if self.parent.char == self.orig_char:
+                self.parent.char = '?'
+                self.parent.color = (255, 0, 255)
+
+    def end_effect(self):
+        self.parent.char = self.orig_char
+        self.parent.color = self.orig_color
+        self.parent.gamemap.engine.message_log.add_message(f"The {self.parent.name} has regained its wits")

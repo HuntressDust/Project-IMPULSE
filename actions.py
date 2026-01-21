@@ -85,11 +85,12 @@ class MeleeAction(ActionWithDirection):
             self.engine.message_log.add_message(
                 f"{attack_desc} for {damage} hit points.", attack_color
             )
-            target.fighter.hp -= damage
+            target.fighter.take_damage(damage)
         else:
             self.engine.message_log.add_message(
                 f"{attack_desc} but does no damage.", attack_color
             )
+        self.entity.set_wait_counter(5)
 
 class RangedAttackAction(Action):
     def __init__(self, entity: Actor, x: int, y: int):
@@ -191,7 +192,9 @@ class RangedAttackAction(Action):
             damage +=self.attack_with_slot(slot,target,attack_color)
         attack_desc = f"{self.entity.name.capitalize()} hits {target.name}"
 
+
         self.entity.set_wait_counter(5)
+        print(self.entity.wait_turns, "wait counter")
         if damage > 0:
             self.engine.message_log.add_message(
                 f"{attack_desc} for {damage} hp", attack_color
@@ -261,6 +264,7 @@ class HackAction(Action) :
         self.engine.message_log.add_message(
             f"you successfully hack the {target.name}, I guess", color.status_effect
         )
+        self.entity.set_wait_counter(5)
         return True
 
 class ItemAction(Action):
@@ -278,11 +282,13 @@ class ItemAction(Action):
         return self.engine.game_map.get_actor_at_location(*self.target_xy)
 
     def perform(self) -> None:
+        self.entity.set_wait_counter(5)
         if self.item.consumable:
             self.item.consumable.activate(self)
 
 class DropItem(ItemAction):
     def perform(self) -> None:
+        self.entity.set_wait_counter(5)
         if self.entity.equipment.item_is_equipped(self.item):
             self.entity.equipment.toggle_equip(self.item)
 
@@ -307,6 +313,7 @@ class EquipAction(Action):
 
     def perform(self) -> None:
        # print("call toggle equip")
+       self.entity.set_wait_counter(5)
        if hasattr(self,"hand"):
            print(self.hand)
            self.entity.equipment.toggle_equip(self.item, add_message=True,hand=self.hand)
@@ -315,6 +322,7 @@ class EquipAction(Action):
 
 class PickupAction(Action):
     def __init__(self, entity: Actor):
+        self.entity.set_wait_counter(1)
         super().__init__(entity)
 
     def perform(self) -> None:

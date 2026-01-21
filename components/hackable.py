@@ -24,9 +24,8 @@ class Hackable(BaseComponent):
         self.parent.gamemap.engine.message_log.add_message(f"{hacker.name} hacks the {self.parent.name} for {damage} damage")
 
     def Confuse(self,hacker: Actor):
-        self.parent.ai=components.ai.ConfusedEnemy(
-            entity= self.parent, previous_ai = self.parent.ai, turns_remaining =self.number_of_turns,
-        )
+        self.parent.status.add_effect(status_effects.Confused(target=self.parent, max_time=100,))
+
 
     def Blaze(self, hacker: Actor):
         self.parent.status.add_effect(status_effects.Burning(target=self.parent, max_time=100,))
