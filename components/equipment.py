@@ -19,6 +19,12 @@ class Equipment(BaseComponent):
         self.bonus_active=False
         self.slots=("right_hand", "left_hand", "bonus_slot")
 
+    def toggle_bonus(self):
+        item_in_slot = getattr(self, "bonus_slot")
+        if item_in_slot is not None:
+            self.toggle_equip(item_in_slot, add_message=True)
+        self.bonus_active=not self.bonus_active
+
     @property
     def is_unarmed(self):
         return ( self.right_hand is None and self.left_hand is None and self.bonus_slot is None)

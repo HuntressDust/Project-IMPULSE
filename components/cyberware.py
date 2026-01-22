@@ -68,3 +68,56 @@ class Cyberware(BaseComponent):
             self.unequip_from_slot(slot, add_message)
         else:
             self.equip_to_slot(slot, cyberware, add_message)
+
+
+    def total_power_bonus(self) -> int:
+        total_power_bonus = 0
+        for slot in self.slots:
+            cyberware = getattr(self, slot)
+            if cyberware is not None:
+                if cyberware.bodymod.power_bonus is not None:
+                    total_power_bonus += cyberware.bodymod.power_bonus
+        return total_power_bonus
+
+    def total_accuracy_bonus(self) -> int:
+        total_accuracy_bonus = 0
+        for slot in self.slots:
+            cyberware = getattr(self, slot)
+            if cyberware is not None:
+                if cyberware.bodymod.accuracy_bonus is not None:
+                    total_accuracy_bonus += cyberware.bodymod.accuracy_bonus
+        return total_accuracy_bonus
+
+    def total_speed_bonus(self) -> int:
+        total_speed_bonus = 0
+        for slot in self.slots:
+            cyberware = getattr(self, slot)
+            if cyberware is not None:
+                if cyberware.bodymod.speed_bonus is not None:
+                    total_speed_bonus += cyberware.bodymod.speed_bonus
+        return total_speed_bonus
+
+    def total_focus_bonus(self):
+        total_focus_bonus = 0
+        for slot in self.slots:
+            cyberware = getattr(self, slot)
+            if cyberware is not None:
+                if cyberware.bodymod.focus_bonus is not None:
+                    total_focus_bonus += cyberware.bodymod.focus_bonus
+        return total_focus_bonus
+
+    def total_health_bonus(self):
+        total_health_bonus = 0
+        for slot in self.slots:
+            cyberware = getattr(self, slot)
+            if cyberware is not None:
+                if cyberware.bodymod.health_bonus is not None:
+                    total_health_bonus += cyberware.bodymod.health_bonus
+        return total_health_bonus
+
+    def has_slot_perk(self) -> bool:
+        cyberware = getattr(self, "torso")
+        if cyberware is not None:
+            return cyberware.bodymod.slot_perk
+        else:
+            return False

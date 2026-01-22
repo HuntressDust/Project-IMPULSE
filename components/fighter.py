@@ -10,12 +10,14 @@ if  TYPE_CHECKING:
 class Fighter(BaseComponent):
     parent: Actor
 
-    def __init__(self, hp: int, base_defense: int, base_power : int, base_speed : int):
+    def __init__(self, hp: int, base_defense: int, base_power : int, base_speed : int, base_accuracy: int, base_focus: int):
         self.max_hp = hp
         self._hp = hp
         self.base_defense = base_defense
         self.base_power = base_power
         self.base_speed=base_speed
+        self.base_accuracy = base_accuracy
+        self.base_focus = base_focus
 
     @property
     def hp(self) -> int:
@@ -35,6 +37,10 @@ class Fighter(BaseComponent):
     def power(self) -> int:
         return self.base_power + self.power_bonus
 
+    @property
+    def accuracy(self) -> int:
+        return self.base_accuracy + self.accuracy_bonus
+
 
     def power_from_slot(self,slot):
         print("BASE:",self.base_power)
@@ -43,7 +49,7 @@ class Fighter(BaseComponent):
 
     @property
     def speed(self) -> int:
-        return self.base_speed
+        return self.base_speed + self.speed_bonus
 
     @property
     def defense_bonus(self) -> int:
@@ -60,8 +66,25 @@ class Fighter(BaseComponent):
             return 1
     @property
     def power_bonus(self) -> int:
+        power_bonus = 0
+        if self.parent.cyberware:
+            power_bonus += self.parent.cyberware.total_power_bonus
         if self.parent.equipment:
-            return self.parent.equipment.total_power_bonus
+            power_bonus+= self.parent.equipment.total_power_bonus
+
+        return power_bonus
+
+    @property
+    def speed_bonus(self) -> int:
+        if self.parent.cyberware:
+            return self.parent.cyberware.total_speed_bonus
+        else:
+            return 0
+
+    @property
+    def accuracy_bonus(self) -> int:
+        if self.parent.cyberware:
+            return self.parent.cyberware.total_accuracy_bonus
         else:
             return 0
 
@@ -73,12 +96,12 @@ class Fighter(BaseComponent):
 
     def die(self) -> None:
         if self.engine.player is self.parent:
-            death_message = "YOUUUUU HAVE FALLEN YOU STUPID BITCH!!! AHAHAHAHAHAHAHAH"
+            death_message = "You have been struck down. Thoughts and prayers."
             death_message_color = color.player_die
 
 
         else:
-            death_message =f"{self.parent.name} is killded"
+            death_message =f"{self.parent.name} has been eliminated."
             death_message_color = color.enemy_die
 
 
@@ -91,6 +114,7 @@ class Fighter(BaseComponent):
 
         self.engine.message_log.add_message(death_message,death_message_color)
         self.engine.player.level.add_xp(self.parent.level.xp_given)
+
     def heal(self,amount: int) -> int:
         if self.hp == self.max_hp:
             return 0

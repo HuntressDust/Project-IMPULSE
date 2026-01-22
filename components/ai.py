@@ -149,7 +149,7 @@ class Ally(BaseAI):
 
             if hasattr(entity,"ai"):
 
-                if isinstance(entity.ai,HostileEnemy):
+                if isinstance(entity.ai,HostileEnemy) or isinstance(entity.ai,ConfusedEnemy):
 
                  if self.engine.game_map.visible[entity.x, entity.y]:
 
@@ -161,6 +161,7 @@ class Ally(BaseAI):
 
     def perform(self) -> None:
         if not self.has_valid_target():
+            self.target = None
             self.pickTarget()
             if self.has_valid_target():
                 self.engine.message_log.add_message(f"Engaging {self.target.name}!", ally)

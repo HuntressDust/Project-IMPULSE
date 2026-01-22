@@ -57,6 +57,7 @@ class Burning(StatusEffect):
 class Confused(StatusEffect):
     def __init__(self, target: Actor, max_time: int):
         super().__init__(target, max_time)
+        self.orig_ai=self.parent.ai
 
     def perform(self):
         if self.parent.ai is not ConfusedEnemy:
@@ -71,4 +72,5 @@ class Confused(StatusEffect):
     def end_effect(self):
         self.parent.char = self.orig_char
         self.parent.color = self.orig_color
+        self.parent.ai=self.orig_ai
         self.parent.gamemap.engine.message_log.add_message(f"The {self.parent.name} has regained its wits")
