@@ -1,0 +1,70 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
+from IMPULSE.components.base_component import BaseComponent
+
+if TYPE_CHECKING:
+    from IMPULSE.entity import Actor
+
+class Level(BaseComponent):
+    parent: Actor
+
+    def __init__(self,
+                 current_level: int=1,
+                 current_xp: int =0,
+                 level_up_base: int=0,
+                 level_up_factor: int =150,
+                 xp_given: int = 0):
+        self.current_level = current_level
+        self.current_level = current_level
+        self.current_xp = current_xp
+        self.level_up_base = level_up_base
+        self.level_up_factor = level_up_factor
+        self.xp_given = xp_given
+
+    @property
+    def experience_to_next_level(self) -> int:
+        return  self.level_up_base+ self.current_level * self.level_up_factor
+    @property
+    def requires_level_up(self) -> bool:
+        return  self.current_xp>self.experience_to_next_level
+
+    def add_xp(self, xp: int) -> None:
+        if xp==0 or self.level_up_base ==0:
+            return
+
+        self.current_xp += xp
+
+        self.engine.message_log.add_message(f"You get {xp} Points")
+
+        if self.requires_level_up:
+            self.engine.message_log.add_message(
+                f"Sweat trickles down your brow as you ascend to level {self.current_level +1}!"
+            )
+
+    def increase_level(self) -> None:
+        self.current_xp -= self.experience_to_next_level
+
+        self.current_level += 1
+
+    def increase_focus(self, amount: int = 1) -> None:
+        self.parent.fighter.base_focus += amount
+        self.parent.fighter.fp += amount
+
+
+        self.engine.message_log.add_message("Your mind fills with complex patterns and psychic pathways")
+
+        self.increase_level()
+
+    def increase_power(self, amount: int = 1) -> None:
+        self.parent.fighter.base_power += amount
+
+        self.engine.message_log.add_message("Your muscles flex and your bones harden")
+
+        self.increase_level()
+
+    def increase_reflex(self, amount: int = 1) -> None:
+        self.parent.fighter.base_reflex += amount
+
+        self.engine.message_log.add_message("Your eyes dance and you sinews are at the ready")
+
+        self.increase_level()
