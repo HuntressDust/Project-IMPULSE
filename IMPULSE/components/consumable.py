@@ -8,8 +8,10 @@ from IMPULSE import color
 from IMPULSE.components.base_component import BaseComponent
 import IMPULSE.components.ai
 from IMPULSE.components.inventory import Inventory
+from IMPULSE.damage_types import DamageType
 from IMPULSE.exceptions import Impossible
 from IMPULSE.input_handler import  ActionOrHandler, SingleRangedAttackHandler, RangedAOEAttackHandler
+from IMPULSE.status_effects import StatusEffect, Burning
 if TYPE_CHECKING:
     from IMPULSE.entity import Actor, Item
 
@@ -86,11 +88,71 @@ class HealingConsumable(Consumable):
 
         if amount_recovered > 0:
             self.engine.message_log.add_message(
-                f"you slurp that {self.parent.name} for {amount_recovered} fuel units", color.health_recovered,
+                f" You patch yourself up with the {self.parent.name} and heal {amount_recovered} hit points", color.health_recovered,
             )
             self.consume()
         else:
             raise Impossible("youre at full health dummy")
+
+class FocusConsumable(HealingConsumable):
+    def activate(self, action: actions.ItemAction) -> None:
+
+        consumer = action.entity
+        amount_recovered = consumer.fighter.heal_FP(self.amount)
+
+        if amount_recovered > 0:
+            self.engine.message_log.add_message(
+                f"You drink the{self.parent.name} and recover {amount_recovered} focus points", color.health_recovered,
+            )
+            self.consume()
+        else:
+            raise Impossible("You're already at full FP")
+
+class EstrogenConsumable(Consumable):
+    def __init__(self,duration: int):
+        self.duration = duration
+
+    def activate(self, action: actions.ItemAction) -> None:
+
+        consumer = action.entity
+        # determine if disphoria
+        #if disphoria then remove it
+        # if nothing then add euphoria
+        #if euphoria then raise impossible
+
+class WeedConsumable(Consumable):
+    def activate(self, action: actions.ItemAction) -> None:
+        consumer = action.entity
+        #if has negative status effects
+        #remove it
+        #else
+        #raise impossible
+
+class ProgesteroneConsumable(Consumable):
+    def __init__(self,duration: int):
+        self.duration = duration
+
+    def activate(self, action: actions.ItemAction) -> None:
+
+        consumer = action.entity
+        # determine if health bonus
+
+class AmphetameneConsumable(Consumable):
+    def __init__(self, duration: int):
+        self.duration = duration
+
+    def activate(self, action: actions.ItemAction) -> None:
+        consumer = action.entity
+        # determine if focus Bonus
+
+class Adrenaline(Consumable):
+    def __init__(self, duration: int):
+        self.duration = duration
+
+    def activate(self, action: actions.ItemAction) -> None:
+        consumer = action.entity
+        # determine if Reflex Bonus
+
 
 class  ArcDamageConsumable(Consumable):
     def __init__(self, damage: int, maximum_range: int):
@@ -118,7 +180,7 @@ class  ArcDamageConsumable(Consumable):
             target.fighter.take_damage(self.damage)
             self.consume()
         else:
-            raise Impossible("theres nobody heeeeeeereeee")
+            raise Impossible("There are no enemies to attack ")
 
 class ConfusionConsumable(Consumable):
     def __init__(self, number_of_turns: int):
@@ -126,7 +188,7 @@ class ConfusionConsumable(Consumable):
 
     def get_action(self, consumer:Actor) -> SingleRangedAttackHandler:
         self.engine.message_log.add_message(
-            "pick the poor fucker", color.needs_target
+            "Select Target", color.needs_target
         )
 
         return SingleRangedAttackHandler(
@@ -140,53 +202,80 @@ class ConfusionConsumable(Consumable):
         target = action.target_actor
 
         if not self.engine.game_map.visible[action.target_xy]:
-            raise  Impossible("you cant see that far")
+            raise  Impossible("No Target Selected")
         if not target:
-            raise Impossible("theres no one there")
+            raise Impossible("No Target Selected")
         if target is consumer:
-            raise Impossible("Dissociative Drugs comming soon ^w^")
+            raise Impossible("Dissociative Drugs coming soon ^w^")
         self.engine.message_log.add_message(
-            f"you get the {target.name} reallllllllly highhhhh duuuuude woah", color.status_effect
+            f"The {target.name} stumbles around in a dissociative haze!", color.status_effect
         )
         target.ai=components.ai.ConfusedEnemy(
             entity= target, previous_ai = target.ai, turns_remaining =self.number_of_turns,
         )
         self.consume()
 
-class   FireExplosionConsumable(Consumable):
 
+class AOEConsumable(Consumable):
     def __init__(self, damage: int, radius: int):
         self.damage = damage
         self.radius = radius
 
-    def get_action(self, consumer:Actor) -> RangedAOEAttackHandler:
+    def get_action(self, consumer: Actor) -> RangedAOEAttackHandler:
         self.engine.message_log.add_message(
             "select target", color.needs_target
         )
 
         return RangedAOEAttackHandler(
             self.engine,
-            radius = self.radius,
-            callback = lambda xy:actions.ItemAction(consumer, self.parent, xy),
+            radius=self.radius,
+            callback=lambda xy: actions.ItemAction(consumer, self.parent, xy),
         )
+
+    def activate(self, action: actions.ItemAction) -> None:
+        raise NotImplementedError
+
+
+class FireExplosionConsumable(AOEConsumable):
 
 
     def activate(self, action: actions.ItemAction) -> None:
         target_xy = action.target_xy
 
         if not self.engine.game_map.visible[target_xy]:
-            raise Impossible("Not allowed to fire blindly into darkness")
+            raise Impossible("Invalid Target")
 
-        target_hits =False
+        target_hits = False
 
         for actor in self.engine.game_map.actors:
             if actor.distance(*target_xy) <= self.radius:
+                damage = actor.fighter.take_damage(self.damage, damagetype=DamageType.FIRE)
                 self.engine.message_log.add_message(
-                    f"the {actor.name} gets fuuuuucked up for {self.damage} hit points"
+                    f"The {actor.name} is caught in a blaze of fire for  {damage} hit points"
                 )
-                actor.fighter.take_damage(self.damage)
-                target_hits = True
+                if actor.fighter.burn_resist < 40:
+                    actor.status.add_effect(Burning)
 
-        if not target_hits:
-            raise Impossible("Not yet allowed to attack nothing")
         self.consume()
+
+class FragConsumable(AOEConsumable):
+
+
+    def activate(self, action: actions.ItemAction) -> None:
+        target_xy = action.target_xy
+
+        if not self.engine.game_map.visible[target_xy]:
+            raise Impossible("Invalid Target")
+
+        target_hits = False
+
+        for actor in self.engine.game_map.actors:
+            if actor.distance(*target_xy) <= self.radius:
+                damage = actor.fighter.take_damage(self.damage,)
+                self.engine.message_log.add_message(
+                    f"The {actor.name} is caught in a blaze of fire for  {damage} hit points"
+                )
+
+        self.consume()
+
+class

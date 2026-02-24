@@ -77,7 +77,7 @@ class weapon_slot(BodyMod):
     def __init__(self) -> None:
         super().__init__(bodypart=BodyPart.ARMS, name="Heavy Weapons Platform",perk="slot")
 
-class reflex_upgrate(BodyMod):
+class reflex_upgrade(BodyMod):
     def __init__(self) -> None:
         super().__init__(bodypart=BodyPart.ARMS, name="Rapid Response Servos",reflex_bonus=5)
 class bionic_arm(BodyMod):

@@ -1,5 +1,4 @@
 from IMPULSE.components.ai import BaseAI
-from IMPULSE.components.equippable import shock_claws
 
 from IMPULSE.components.hacker import Hacker
 from IMPULSE.components.equipment import Equipment
@@ -108,30 +107,64 @@ fire_grenade= Item(
 cool_knife=Item(
     char="/", color=(0,191,255), name="Cool Knife", equippable=equippable.cool_knife()
 )
-shock_claws
-pistol=Item(
-    char="/", color=(255,0,255), name="Pistol", equippable=equippable.pistol()
+shock_claws=Item(
+    char="/", color=(0,100,255),name="Shock Claws", equippable=equippable.shock_claws()
 )
-
+misericorde=Item(
+    char="/", color=(0,90,255),name="Misericorde", equippable=equippable.misericorde())
+labrys=Item(
+    char="/", color=(128,0,128), name="Labrys", equippable= equippable.labrys()
+)
 rapier=Item(
     char="/", color=(0,191,255), name="Rapier", equippable=equippable.rapier()
 )
 
+pistol=Item(
+    char="/", color=(255,0,255), name="Pistol", equippable=equippable.pistol()
+)
 
+assaultRifle=Item(
+    char="/", color=(255,0,200), name="Assault Rifle", equippable=equippable.assualtRifle()
+)
+flameThrower=Item(
+    char="/", color=(255,20,20), name="Flame Thrower", equippable=equippable.assualtRifle()
+)
+chainGun=Item(
+    char="/", color=(200,200,200),name="Chain Gun", equippable=equippable.chainGun()
+)
+latexBodySuit=Item(
+    char="[", color=(10,10,10), name="Latex BodySuit", equippable=equippable.latex_bodysuit()
+)
 leather_jacket=Item(
     char="[", color=(139,69,19), name="Leather Jacket", equippable=equippable.leather_jacket()
 
 )
+jumpsuit=Item(
+    char="[",color=(10,10,200), name="Jumpsuit", equippable=equippable.jumpsuit()
+)
+dress=Item(
+    char="[", color=(50,50,50), name="Dress", equippable=equippable.dress()
+)
+
 hazard_suit = Item(
     char="[", color=(169,69,69), name="Hazard Suit", equippable= equippable.hazard_suit()
-)
-spear = Item(
-    char="/", color=(169,69,69), name="Spear", equippable= equippable.spear()
 )
 
 hack_upgrade = Item(
     char="i", color=(255,0,255), name="Hacking Upgrade", bodymod= bodymod.hack_upgrade()
 )
+
+los_upgrade = Item(
+    char="i", color=(200,0,255), name="Long Range Sensors", bodymod= bodymod.los_upgrade()
+)
+accuracy_upgrade=Item(
+    char="i", color=(150,0,255), name="Integrated Fire Control", bodymod= bodymod.accuracy_upgrade()
+)
+
+control_upgrade=Item(
+    char="i",color=(100,0,255), name="Inegrated Fire Control", bodymod= bodymod.control_upgrade()
+)
+
 
 weapon_slot = Item(
     char="i", color=(255,0,255), name="Hvy Wpn Pltfrm", bodymod= bodymod.weapon_slot()
@@ -140,12 +173,42 @@ sheilding = Item(
     char="i", color=(255,0,100), name="Sheilding Upgrade", bodymod= bodymod.sheilding()
 )
 
+electric_sheilding=Item(
+    char="i", color=(50,0,255), name="Faraday Suite", bodymod= bodymod.electric_sheilding()
+)
+fire_sheilding=Item(
+    char="i", color=(0,50,255), name="Rapid Cooling Trunk", bodymod= bodymod.fire_sheilding()
+)
+boobs=Item(
+    char="i", color=(50,50,255), name="Breast Forms [K]", bodymod=bodymod.boobs()
+)
+
+reflex_upgrade=Item(
+    char="i", color=(100,50,255), name="Rapid Response Servos", bodymod=bodymod.reflex_upgrade()
+)
+
+
+bionic_arm=Item(
+    char="i", color=(150,50,255), name="High Tensile Tendons", bodymod=bodymod.bionic_arm()
+
+)
+
+rocket_fist=Item(
+    char="i", color=(200,50,255), name="R.P.F", bodymod=bodymod.rocket_fist()
+)
+
+power_legs=Item(
+    char="i", color=(255,50,255), name="Stability Modules", bodymod=bodymod.power_legs())
+
+carrymod=Item(
+    char="i", color=(255,100,255), name=" Carbon Nano-Bones",bodymod=bodymod.carry()
+)
+
+
 super_legs = Item(
     char= "i", color=(255,30,100), name="Leg Upgrade", bodymod=bodymod.super_legs()
 )
 
-labrys=Item(
-    char="/", color=(128,0,128), name="Labrys", equippable= equippable.labrys()
-)
+
 MedBay = Station(
     char="X", color=(1,1,1), name="MedBay")
