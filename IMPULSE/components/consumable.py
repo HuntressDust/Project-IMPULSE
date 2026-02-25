@@ -11,7 +11,10 @@ from IMPULSE.components.inventory import Inventory
 from IMPULSE.damage_types import DamageType
 from IMPULSE.exceptions import Impossible
 from IMPULSE.input_handler import  ActionOrHandler, SingleRangedAttackHandler, RangedAOEAttackHandler
-from IMPULSE.status_effects import StatusEffect, Burning
+from IMPULSE.status_effects import StatusEffect, Burning, Euphoria, Horny, HPBuff, FPBuff, Dysphoria,Hyper,Focused,Confused
+
+from status_effects import Euphoria, Horny, HPBuff
+
 if TYPE_CHECKING:
     from IMPULSE.entity import Actor, Item
 
@@ -88,7 +91,7 @@ class HealingConsumable(Consumable):
 
         if amount_recovered > 0:
             self.engine.message_log.add_message(
-                f" You patch yourself up with the {self.parent.name} and heal {amount_recovered} hit points", color.health_recovered,
+                f" You patch yourself up with the {self.parent.name} and heal {amount_recovered} hp", color.health_recovered,
             )
             self.consume()
         else:
@@ -102,7 +105,7 @@ class FocusConsumable(HealingConsumable):
 
         if amount_recovered > 0:
             self.engine.message_log.add_message(
-                f"You drink the{self.parent.name} and recover {amount_recovered} focus points", color.health_recovered,
+                f"You drink the{self.parent.name} and recover {amount_recovered} fp", color.health_recovered,
             )
             self.consume()
         else:
@@ -115,44 +118,135 @@ class EstrogenConsumable(Consumable):
     def activate(self, action: actions.ItemAction) -> None:
 
         consumer = action.entity
-        # determine if disphoria
-        #if disphoria then remove it
-        # if nothing then add euphoria
-        #if euphoria then raise impossible
 
+        dysphoriaFlag = False
+        for effect in consumer.status.effects:
+            if effect.abrev=="DYS":
+                dysphoriaFlag = True
+
+                effect.end_effect()
+                tempEffect=effect
+
+            if effect.abrev=="EUP":
+                raise Impossible("You are already Euphoric")
+
+        if dysphoriaFlag:
+
+            consumer.status.effects.remove(tempEffect)
+        else:
+            consumer.status.add_effect(Euphoria(consumer,self.duration,))
+
+        self.engine.message_log.add_message(
+            f"You inject 3mg Estradiol intramuscular and immediatly feel better", color.health_recovered,
+        )
+        self.consume()
 class WeedConsumable(Consumable):
     def activate(self, action: actions.ItemAction) -> None:
         consumer = action.entity
-        #if has negative status effects
-        #remove it
-        #else
-        #raise impossible
+
+        debuff_list=list()
+        for effect in consumer.status.effects:
+            if effect.abrev == "DYS" or effect.abrev =="TRGT" or effect.abrev=="BURN":
+                debuff_list.append(effect)
+
+        if len(debuff_list)==0:
+            raise Impossible("You have not status effects to clear")
+        else:
+            for debuff in debuff_list:
+                debuff.end_effect()
+                consumer.status.effects.remove(debuff)
+
+            self.engine.message_log.add_message(
+                f"You smoke some cyber-weed and feel your troubles melt away", color.health_recovered,
+            )
+            self.consume()
 
 class ProgesteroneConsumable(Consumable):
     def __init__(self,duration: int):
         self.duration = duration
-
     def activate(self, action: actions.ItemAction) -> None:
-
         consumer = action.entity
-        # determine if health bonus
 
-class AmphetameneConsumable(Consumable):
-    def __init__(self, duration: int):
+        for effect in consumer.status.effects:
+            if effect.abrev == "UWU":
+                raise Impossible("You are already seething with Lust")
+
+        consumer.status.add_effect(Horny(consumer, self.duration, ))
+
+        self.engine.message_log.add_message(
+            f"You boof your PROG and are overcome with Lust!", color.health_recovered,
+        )
+        self.consume()
+
+class PoppersConsumable(Consumable):
+    def __init__(self,duration: int, amount: int):
         self.duration = duration
-
+        self.amount = amount
     def activate(self, action: actions.ItemAction) -> None:
         consumer = action.entity
-        # determine if focus Bonus
 
+        for effect in consumer.status.effects:
+            if effect.abrev == "HPUP":
+                raise Impossible("You are already numbed to pain")
+
+        consumer.status.add_effect(HPBuff(consumer, self.duration, self.amount ))
+
+        self.engine.message_log.add_message(
+            f"You inhale your POPPERS and feel numb to pain!", color.health_recovered,
+        )
+        self.consume()
+
+
+class AmphetameineConsumable(Consumable):
+    def __init__(self,duration: int, amount: int):
+        self.duration = duration
+        self.amount = amount
+    def activate(self, action: actions.ItemAction) -> None:
+        consumer = action.entity
+
+        for effect in consumer.status.effects:
+            if effect.abrev == "FPUP":
+                raise Impossible("You are already alert!")
+
+        consumer.status.add_effect(FPBuff(consumer, self.duration, self.amount ))
+
+        self.engine.message_log.add_message(
+            f"You take your STIMS and and can think with intensity!", color.health_recovered,
+        )
+        self.consume()
 class Adrenaline(Consumable):
-    def __init__(self, duration: int):
+    def __init__(self,duration: int):
         self.duration = duration
-
     def activate(self, action: actions.ItemAction) -> None:
         consumer = action.entity
-        # determine if Reflex Bonus
 
+        for effect in consumer.status.effects:
+            if effect.abrev == "RFLX":
+                raise Impossible("You are already hyper-aware!")
+
+        consumer.status.add_effect(Hyper(consumer, self.duration, ))
+
+        self.engine.message_log.add_message(
+            f"You inject ADRENALINE and are now hyper-aware of your surroundings!", color.health_recovered,
+        )
+        self.consume()
+
+class hypnofile(Consumable):
+    def __init__(self,duration: int):
+        self.duration = duration
+    def activate(self, action: actions.ItemAction) -> None:
+        consumer = action.entity
+
+        for effect in consumer.status.effects:
+            if effect.abrev == "FOC":
+                raise Impossible("You are already hyperfocused")
+
+        consumer.status.add_effect(Focused(consumer, self.duration, ))
+
+        self.engine.message_log.add_message(
+            f"You load your hypno-file and are hyperfocused!", color.health_recovered,
+        )
+        self.consume()
 
 class  ArcDamageConsumable(Consumable):
     def __init__(self, damage: int, maximum_range: int):
@@ -210,9 +304,7 @@ class ConfusionConsumable(Consumable):
         self.engine.message_log.add_message(
             f"The {target.name} stumbles around in a dissociative haze!", color.status_effect
         )
-        target.ai=components.ai.ConfusedEnemy(
-            entity= target, previous_ai = target.ai, turns_remaining =self.number_of_turns,
-        )
+        target.status.add_effect(Confused(target,self.number_of_turns))
         self.consume()
 
 
@@ -277,5 +369,3 @@ class FragConsumable(AOEConsumable):
                 )
 
         self.consume()
-
-class

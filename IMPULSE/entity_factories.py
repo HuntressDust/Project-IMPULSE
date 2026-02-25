@@ -5,13 +5,14 @@ from IMPULSE.components.equipment import Equipment
 from IMPULSE.components.cyberware import Cyberware
 from IMPULSE.components.ai import Idle, MeleeEnemy,RangedEnemy,Angel
 from IMPULSE.components.fighter import Fighter
-from IMPULSE.components import consumable, equippable, bodymod
+from IMPULSE.components import consumable, equippable, bodymod, description
 from IMPULSE.components.inventory import  Inventory
 from IMPULSE.components.level import Level
 from IMPULSE.components.status import Status
 from IMPULSE.entity import Actor, Item, Station
 from IMPULSE.components.controller import Controller
 from IMPULSE import virus
+f
 
 player = Actor(char="@",
                color = (255,255,255),
@@ -36,7 +37,8 @@ doll = Actor(char="d",
                level=Level(level_up_base=200),
                equipment=Equipment(),
                cyberware=Cyberware(),
-               status=Status()
+               status=Status(),
+                desc=description.doll
                )
 drone =Actor(char="S",
     color = (63, 127, 63),
@@ -46,6 +48,7 @@ drone =Actor(char="S",
     inventory = Inventory(capacity=0),
     level = Level(xp_given=100),
     status = Status(),
+desc=description.sentry
              )
 
 angel= Actor(char="A",
@@ -69,7 +72,8 @@ cyberTest= Actor(char="C",
                inventory=Inventory(capacity=0),
                level=Level(xp_given=250),
                 cyberware=Cyberware(),
-                status=Status()
+                status=Status(),
+                desc=description.cybork
                )
 
 health_potion = Item(
@@ -105,38 +109,38 @@ fire_grenade= Item(
 )
 
 cool_knife=Item(
-    char="/", color=(0,191,255), name="Cool Knife", equippable=equippable.cool_knife()
+    char="/", color=(0,191,255), name="Cool Knife", equippable=equippable.cool_knife(), desc=description.knife()
 )
 shock_claws=Item(
-    char="/", color=(0,100,255),name="Shock Claws", equippable=equippable.shock_claws()
+    char="/", color=(0,100,255),name="Shock Claws", equippable=equippable.shock_claws(),desc=description.ShockClaw()
 )
 misericorde=Item(
-    char="/", color=(0,90,255),name="Misericorde", equippable=equippable.misericorde())
+    char="/", color=(0,90,255),name="Misericorde", equippable=equippable.misericorde(),desc=description.misieriecorde())
 labrys=Item(
-    char="/", color=(128,0,128), name="Labrys", equippable= equippable.labrys()
+    char="/", color=(128,0,128), name="Labrys", equippable= equippable.labrys(),desc=description.labrys()
 )
 rapier=Item(
     char="/", color=(0,191,255), name="Rapier", equippable=equippable.rapier()
 )
 
 pistol=Item(
-    char="/", color=(255,0,255), name="Pistol", equippable=equippable.pistol()
+    char="/", color=(255,0,255), name="Pistol", equippable=equippable.pistol(),desc=description.pistol()
 )
 
 assaultRifle=Item(
-    char="/", color=(255,0,200), name="Assault Rifle", equippable=equippable.assualtRifle()
+    char="/", color=(255,0,200), name="Assault Rifle", equippable=equippable.assualtRifle(),desc=description.assault()
 )
 flameThrower=Item(
     char="/", color=(255,20,20), name="Flame Thrower", equippable=equippable.assualtRifle()
 )
 chainGun=Item(
-    char="/", color=(200,200,200),name="Chain Gun", equippable=equippable.chainGun()
+    char="/", color=(200,200,200),name="Chain Gun", equippable=equippable.chainGun(),desc=description.ChainGun()
 )
 latexBodySuit=Item(
     char="[", color=(10,10,10), name="Latex BodySuit", equippable=equippable.latex_bodysuit()
 )
 leather_jacket=Item(
-    char="[", color=(139,69,19), name="Leather Jacket", equippable=equippable.leather_jacket()
+    char="[", color=(139,69,19), name="Leather Jacket", equippable=equippable.leather_jacket(),desc=description.leather_jacket
 
 )
 jumpsuit=Item(
@@ -155,7 +159,7 @@ hack_upgrade = Item(
 )
 
 los_upgrade = Item(
-    char="i", color=(200,0,255), name="Long Range Sensors", bodymod= bodymod.los_upgrade()
+    char="i", color=(200,0,255), name="Long Range Sensors", bodymod= bodymod.los_upgrade(),desc=description.los_upgrade()
 )
 accuracy_upgrade=Item(
     char="i", color=(150,0,255), name="Integrated Fire Control", bodymod= bodymod.accuracy_upgrade()
@@ -170,7 +174,7 @@ weapon_slot = Item(
     char="i", color=(255,0,255), name="Hvy Wpn Pltfrm", bodymod= bodymod.weapon_slot()
 )
 sheilding = Item(
-    char="i", color=(255,0,100), name="Sheilding Upgrade", bodymod= bodymod.sheilding()
+    char="i", color=(255,0,100), name="Shielding Upgrade", bodymod= bodymod.sheilding()
 )
 
 electric_sheilding=Item(
@@ -180,7 +184,7 @@ fire_sheilding=Item(
     char="i", color=(0,50,255), name="Rapid Cooling Trunk", bodymod= bodymod.fire_sheilding()
 )
 boobs=Item(
-    char="i", color=(50,50,255), name="Breast Forms [K]", bodymod=bodymod.boobs()
+    char="i", color=(50,50,255), name="Breast Forms", bodymod=bodymod.boobs()
 )
 
 reflex_upgrade=Item(

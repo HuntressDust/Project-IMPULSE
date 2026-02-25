@@ -77,10 +77,13 @@ def new_game(playername: str="player") -> Engine:
     player.inventory.items.append(leather_jacket)
     player.equipment.toggle_equip(leather_jacket,add_message=False)
 
-    cyberware=copy.deepcopy(entity_factories.weapon_slot)
-    cyberware.parent = player.inventory
-    player.inventory.items.append(cyberware)
+    slot=copy.deepcopy(entity_factories.weapon_slot)
+    slot.parent = player.inventory
+    player.inventory.items.append(slot)
 
+    LOS=copy.deepcopy(entity_factories.los_upgrade)
+    LOS.parent = player.inventory
+    player.inventory.items.append(LOS)
     return engine
 
 def load_game(filename:str) -> Engine:

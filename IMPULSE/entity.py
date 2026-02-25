@@ -25,6 +25,7 @@ if TYPE_CHECKING:
 
     from IMPULSE.components.hacker import Hacker
 
+
 T= TypeVar("T", bound="Entity")
 
 

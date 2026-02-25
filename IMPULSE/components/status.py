@@ -16,9 +16,21 @@ class Status(BaseComponent):
     parent:Actor
     def __init__(self):
         self.effects=list()
+        self.power_bonus=0
+        self.reflex_bonus=0
+        self.focus_bonus=0
+        self.HP_bonus=0
+        self.FP_bonus=0
+        self.dodge_bonus=0
 
-    def add_effect(self, effect: StatusEffect):
-        self.effects.append(effect)
+    def add_effect(self, new_effect: StatusEffect):
+        try:
+            for effect in self.effects:
+                if effect.abrev == new_effect.abrev:
+                    raise Impossible("Cannot stack the same status effect")
+            self.effects.append(new_effect)
+        except:
+            pass
 
     def update_effects(self):
         for effect in self.effects:

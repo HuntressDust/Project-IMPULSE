@@ -582,7 +582,7 @@ class BodyModSelectionHandler(AskUserEventHandler):
                 console.print(x + 1, y + i + 1, f"({item_string}")
 
 class InventoryExamineHandler(InventoryEventHandler):
-    Title = "Using"
+    Title = "Examining"
     def on_item_selected(self, item: Item) -> Optional[ActionOrHandler]:
         return EntityDescriptionHandler(self.engine,item)
 
