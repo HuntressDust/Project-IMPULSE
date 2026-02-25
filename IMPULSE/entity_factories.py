@@ -12,7 +12,7 @@ from IMPULSE.components.status import Status
 from IMPULSE.entity import Actor, Item, Station
 from IMPULSE.components.controller import Controller
 from IMPULSE import virus
-f
+
 
 player = Actor(char="@",
                color = (255,255,255),
@@ -38,7 +38,7 @@ doll = Actor(char="d",
                equipment=Equipment(),
                cyberware=Cyberware(),
                status=Status(),
-                desc=description.doll
+                desc=description.doll()
                )
 drone =Actor(char="S",
     color = (63, 127, 63),
@@ -48,7 +48,7 @@ drone =Actor(char="S",
     inventory = Inventory(capacity=0),
     level = Level(xp_given=100),
     status = Status(),
-desc=description.sentry
+desc=description.sentry()
              )
 
 angel= Actor(char="A",
@@ -73,7 +73,7 @@ cyberTest= Actor(char="C",
                level=Level(xp_given=250),
                 cyberware=Cyberware(),
                 status=Status(),
-                desc=description.cybork
+                desc=description.cybork()
                )
 
 health_potion = Item(
@@ -115,7 +115,7 @@ shock_claws=Item(
     char="/", color=(0,100,255),name="Shock Claws", equippable=equippable.shock_claws(),desc=description.ShockClaw()
 )
 misericorde=Item(
-    char="/", color=(0,90,255),name="Misericorde", equippable=equippable.misericorde(),desc=description.misieriecorde())
+    char="/", color=(0,90,255),name="Misericorde", equippable=equippable.misericorde(),desc=description.misiericorde())
 labrys=Item(
     char="/", color=(128,0,128), name="Labrys", equippable= equippable.labrys(),desc=description.labrys()
 )

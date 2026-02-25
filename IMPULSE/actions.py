@@ -262,7 +262,7 @@ class MovementAction(ActionWithDirection):
 class BumpAction(ActionWithDirection):
     def perform(self) -> None:
         if self.target_actor:
-            if self.target_actor.name is not "doll":
+            if self.target_actor.name != "doll":
                 return  RangedAttackAction(self.entity, self.target_actor.x, self.target_actor.y).perform()
             else:
                 return SwapAction(self.entity,self.target_actor).perform()

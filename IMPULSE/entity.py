@@ -212,6 +212,7 @@ class Actor(Entity):
         hacker: Optional[Hacker] =None,
         controller: Optional[Controller]= None,
         damage_type: DamageType= DamageType.KINETIC,
+        desc: Description= default_description,
     ):
         super().__init__(
             x=x,
@@ -221,6 +222,7 @@ class Actor(Entity):
             name=name,
             blocks_movement=True,
             render_order=RenderOrder.ACTOR,
+            desc=desc
         )
 
         self.ai: Optional[BaseAI] = ai_cls(self)
@@ -285,6 +287,7 @@ class Item(Entity):
         consumable: Optional[Consumable]=None,
         equippable: Optional[Equippable]= None,
         bodymod: Optional[BodyMod]=None,
+        desc: Description= default_description,
     ):
         super().__init__(
             x=x,
@@ -294,6 +297,7 @@ class Item(Entity):
             name=name,
             blocks_movement=False,
             render_order=RenderOrder.ITEM,
+            desc=desc
         )
         self.damage_type=damage_type
         self.consumable = consumable
