@@ -42,7 +42,7 @@ MOVE_KEYS = {
     # WASD
 
     tcod.event.KeySym.W: (0, -1),
-    tcod.event.KeySym.X: (0, 1),
+    tcod.event.KeySym.S: (0, 1),
     tcod.event.KeySym.A: (-1, 0),
     tcod.event.KeySym.D: (1, 0),
     tcod.event.KeySym.Q: (-1, -1),
@@ -65,7 +65,7 @@ WAIT_KEYS = {
     tcod.event.KeySym.PERIOD,
     tcod.event.KeySym.KP_5,
     tcod.event.KeySym.CLEAR,
-    tcod.event.KeySym.S,
+    tcod.event.KeySym.SPACE,
 
 }
 CONFIRM_KEYS = {
@@ -495,9 +495,9 @@ class HelpScreen(BaseEventHandler):
             console.print(
                 20, 5, "or"
             )
-            console.draw_frame(x=23, y=4, width=3, height=3, decoration="qwea dzxc")
+            console.draw_frame(x=23, y=4, width=3, height=3, decoration="qwea dzsc")
             console.print(
-                1, 8, "5 and S waits"
+                1, 8, "5 and SPACE waits"
             )
             console.print(
                 1, 10, "K makes a Ranged Attack"
