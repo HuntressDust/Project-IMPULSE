@@ -14,7 +14,7 @@ __________________
 
 
 
-This is a ASCII turn based RPG. Used [QWE ASD ZXC ] or the NUMPAD to walk around one tile at a time and attack things.
+This is a ASCII turn based RPG. Used [QWE ASD ZC ] or the NUMPAD to walk around one tile at a time and attack things.
 To get to the next level, find the staircase marked with [>], you can use medbays marked with [X] to heal and install upgrades
 The game ends when you die, or when you get bottom surgery at Floor 10
 Press H to bring up the help screen with more info
@@ -24,13 +24,13 @@ V1.12, compiled 20-07-2026
 Changelog
 V1.121
 You can no longer attack yourself
-Increased cost of Drain, but increased its effectivness. the idea is that you cant just wait around and siphon health from your allies and repair 
+Increased cost of Drain, but increased its effectiveness. the idea is that you cant just wait around and siphon health from your allies and repair 
 	them unless you have a lot of focus
-Walls are now invalid targets for explosives. Before, your grenade would just be eathen and you'd loose your turn
+Walls are now invalid targets for explosives. Before, your grenade would just be eaten and you'd loose your turn
 Two handed weapons are now held in both hands when you equip it while unarmed
 increased generation of flares and ammo, decreased Maids in the early game
 Exterminators now wander like Maids
-chasers now harass the player exclusivly
+chasers now harass the player exclusively
 you can now hack nano clouds. 
 
 
@@ -38,11 +38,11 @@ V1.12
 Added more colors to messages for clarity
 added dodge and accuracy calculations to melee attacks
 ranged puppets now attack at range
-puppets periodicaly may drain your fp slightly depending on the difference between your FOCUS and theirs
+puppets periodically may drain your fp slightly depending on the difference between your FOCUS and theirs
 puppets now attempt to break free if your focus drops below theirs
 rapiers now increase dodge instead of defense
 the labrys now increases defense
-fixed how elemental damage is caluclated
+fixed how elemental damage is calculated
 shorted item info based on context
 various balance tweaks
 
